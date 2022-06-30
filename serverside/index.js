@@ -6,17 +6,19 @@ const cors=require('cors')
 const port= process.env.PORT || 4000;
 const authRoutes=require('./routes/authRoutes')
 const bodyParser=require('body-parser')
+const cookieParser=require('cookie-parser')
 
 app.use(cors({
-    origin:["https://localhost:3000"],
-    methods:["GET","POST"],
+    origin: ["http://localhost:3000"],
+    methods: ["GET","POST"],
     credentials:true,
-    optionsSuccessStatus:200,
-    origin:true
+    
 }))
+
+app.use(cookieParser())
 app.use(bodyParser.json())
 app.use('/',authRoutes)
-app.use(express.json())
+
 
 const start=async()=>{
     await ConnectDB(process.env.MONGO_URI)

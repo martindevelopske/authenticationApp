@@ -1,10 +1,16 @@
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { StyledButton } from '../styles/Styled.button'
 import { Container } from '../styles/Styled.container'
 import { StyledForm } from '../styles/Styled.form'
+import {toast,ToastContainer} from 'react-toastify'
+import "react-toastify/dist/ReactToastify.css"
+
+import axios from 'axios'
+import { loginRoute } from '../utils/APIRoutes'
 
 function Login() {
+    const navigate=useNavigate()
     const [values,setValues]=useState({
         email:"",
         password:""
@@ -12,9 +18,46 @@ function Login() {
     const handleChange=(e)=>{
         setValues({...values,[e.target.name]:e.target.value})
     }
-    const handleSubmit=(e)=>{
+    const handleValidation=()=>{
+        const {email,password}=values
+        if(!email){
+            toast.error("email and password is required")
+            return false;
+        } else if(password.length<5){
+            toast.error("password length should be greater than 5")
+            return false
+        }
+        return true
+    }
+    const handleSubmit= async(e)=>{
         e.preventDefault()
-        console.log(values);
+        if(handleValidation()){
+            console.log("validated");
+            try{
+                const {email,password}=values
+                const {data}= await axios.post(loginRoute,{
+                  email,password
+                },
+                {withCredentials:true})
+
+              // console.log("prrr",values);
+               //console.log(data);
+            //    if (data){
+            //        console.log(data);
+            //    }
+                if(data.status===false){
+                    toast.error(data.msg)
+                }
+                if(data.status===true){
+                    console.log("prrr");
+                }
+                // navigate("/secret")
+            } catch(e){
+                console.log(e.message);
+            }
+    }
+        //navigate("/secret")
+        //console.log(values);
     }
   return (
     <Container>
@@ -27,6 +70,7 @@ function Login() {
             Don't have and account? <Link to="/register">register</Link>
         </div>
         </StyledForm>
+        <ToastContainer />
     </Container>
   )
 }
