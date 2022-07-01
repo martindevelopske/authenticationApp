@@ -36,7 +36,7 @@ function Login() {
             console.log("validated")
             try{
                 const {email,password}=values
-                const {data}= await axios.post("http://localhost:4000/login",{email,password }
+                const {data}= await axios.post(loginRoute,{email,password }
                 ,
                 {withCredentials:true})
                 console.log(data.email);
