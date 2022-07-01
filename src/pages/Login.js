@@ -18,6 +18,7 @@ function Login() {
     const handleChange=(e)=>{
         setValues({...values,[e.target.name]:e.target.value})
     }
+
     const handleValidation=()=>{
         const {email,password}=values
         if(!email){
@@ -32,38 +33,34 @@ function Login() {
     const handleSubmit= async(e)=>{
         e.preventDefault()
         if(handleValidation()){
-            console.log("validated");
+            console.log("validated")
             try{
                 const {email,password}=values
-                const {data}= await axios.post(loginRoute,{
-                  email,password
-                },
+                const {data}= await axios.post("http://localhost:4000/login",{email,password }
+                ,
                 {withCredentials:true})
+                console.log(data.email);
 
-              // console.log("prrr",values);
-               //console.log(data);
-            //    if (data){
-            //        console.log(data);
-            //    }
                 if(data.status===false){
                     toast.error(data.msg)
                 }
                 if(data.status===true){
-                    console.log("prrr");
+                    localStorage.setItem('chat-app user',JSON.stringify(data.user))
+                    navigate("/secret")
                 }
-                // navigate("/secret")
+                
             } catch(e){
-                console.log(e.message);
+                console.log(e);
             }
     }
-        //navigate("/secret")
+        
         //console.log(values);
     }
   return (
     <Container>
         <StyledForm onSubmit={handleSubmit}>
             LOGIN
-        <input type="email" name="email" placeholder="email" onChange={handleChange}></input>
+        <input type="email" name="email" placeholder="email" onChange={(e)=> setValues({...values,[e.target.name]:e.target.value})}></input>
         <input type="password" name="password" placeholder="password" onChange={handleChange}></input>
         <StyledButton type='submit'> Login</StyledButton>
         <div>

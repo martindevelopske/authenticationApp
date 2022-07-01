@@ -33,9 +33,9 @@ function Register() {
         return true;
 
     }
-    const generateError=(err)=>{
-        return toast.error(err)
-    }
+    // const generateError=(err)=>{
+    //     return toast.error(err)
+    // }
     const handleSubmit= async(e)=>{
         e.preventDefault()
         if(handleValidation()){
@@ -53,8 +53,9 @@ function Register() {
                 }
                 if(data.status===true){
                     localStorage.setItem('chat-app-user',JSON.stringify(data.user))
+                    navigate("/secret")
                 }
-                navigate("/secret")
+                
             } catch(e){
                 console.log(e.message);
             }

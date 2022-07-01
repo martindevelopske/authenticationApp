@@ -8,13 +8,12 @@ const bcrypt=require('bcrypt')
 //     })
 // }
 
-const Login= async(res,req,next)=>{
-    const {email,password}=req.body
+const Login= async(req,res,next)=>{
     try{
-        const {email,password}= req.body;
-        //console.log(email);
-        const user= await userModel.findOne({password})
-        //console.log(user);
+        const {email,password}=req.body
+        console.log(email);
+        const user= await userModel.findOne({ email})
+        console.log(user);
     if(!user){
         return res.json({msg:"incorrect username or password", status:false})
         //console.log("user available");
@@ -25,7 +24,7 @@ const Login= async(res,req,next)=>{
         return res.json({msg:"incorrect username or password",status:false});
     }
     delete user.password
-    return res.json({status:true, user})
+    return res.json({status:true,user})
     }catch(e){
         console.log(e.message);
     }
